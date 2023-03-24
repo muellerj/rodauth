@@ -194,6 +194,14 @@ Sequel.migration do
       DateTime :code_issued_at, :null=>false, :default=>Sequel::CURRENT_TIMESTAMP
     end
 
+    # Used by the personal access tokens feature
+    create_table(:personal_access_tokens) do
+      foreign_key :id, :accounts, :primary_key=>true, :type=>primary_key_type
+      String :key, :null=>false
+      Time :created_at, :null=>false, :default=>Sequel::CURRENT_TIMESTAMP
+      Time :last_use, :null=>false, :default=>Sequel::CURRENT_TIMESTAMP
+    end
+
     case database_type
     when :postgres
       user = get(Sequel.lit('current_user')) + '_password'
